@@ -12,8 +12,27 @@ MiniID3NodeTest >> testComputeInformation [
 	b := MiniID3Builder new nodes: nodes. 
 	b ID3ClassBlock: [ :each | each play = 'N' ].
 	self 
-		assert: (b computeInformation - 0.940) < 0.01
+		assert: (b computeInformation information - 0.940) < 0.01
 
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testComputeInformationSubsetSize [
+	| nodes b |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes. 
+	b ID3ClassBlock: [ :each | each play = 'N' ].
+	self 
+		assert: (b computeInformationOf: (nodes select: [:each | each outlook = 'overcast'])) subsetSize
+		equals: 4.
+		
+	self 
+		assert: (b computeInformationOf: (nodes select: [:each | each outlook = 'sunny'])) subsetSize
+		equals: 5.
+		
+	self 
+		assert: (b computeInformationOf: (nodes select: [:each | each outlook = 'rain'])) subsetSize
+		equals: 5.
 ]
 
 { #category : 'tests' }
@@ -29,11 +48,24 @@ MiniID3NodeTest >> testEntropie [
 ]
 
 { #category : 'tests' }
+MiniID3NodeTest >> testEntropieOfOutlook [
+	| nodes b e |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes. 
+	b ID3ClassBlock: [ :each | each play = 'N' ].
+	e := b computeEntropyOf: #outlook.
+	
+	self 
+		assert: (e - 0.694) < 0.01
+
+]
+
+{ #category : 'tests' }
 MiniID3NodeTest >> testNodeCreation [ 
 
 	| line inst |
 	line := MiniID3DataSample new data first.
-	inst := MiniID3Node new 
+	inst := MiniID3Data new 
 		from: line
 		for: #(outlook temperature humidity windy play).
 	self 

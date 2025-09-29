@@ -10,7 +10,7 @@ MiniID3DataSample >> asNode [
 	"self new asNode"
 	
 	^ self data collect: [ :each | 
-		 MiniID3Node new 
+		 MiniID3Data new 
 			from: each 
 			for: #(outlook temperature humidity windy play) ].
 ]

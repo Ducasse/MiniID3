@@ -1,5 +1,5 @@
 Class {
-	#name : 'MiniID3Node',
+	#name : 'MiniID3Data',
 	#superclass : 'Object',
 	#instVars : [
 		'sunny',
@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-MiniID3Node >> from: aLine for: aCollectionOfSelectors [
+MiniID3Data >> from: aLine for: aCollectionOfSelectors [
 
 	aCollectionOfSelectors 
 		with: aLine
@@ -23,38 +23,38 @@ MiniID3Node >> from: aLine for: aCollectionOfSelectors [
 ]
 
 { #category : 'accessing' }
-MiniID3Node >> humidity [
+MiniID3Data >> humidity [
 	^ humidity
 ]
 
 { #category : 'as yet unclassified' }
-MiniID3Node >> humidity: aString [ 
+MiniID3Data >> humidity: aString [ 
 	humidity := aString
 ]
 
 { #category : 'accessing' }
-MiniID3Node >> outlook [
+MiniID3Data >> outlook [
 	^ outlook
 ]
 
 { #category : 'as yet unclassified' }
-MiniID3Node >> outlook: aString [ 
+MiniID3Data >> outlook: aString [ 
 	
 		outlook := aString
 ]
 
 { #category : 'accessing' }
-MiniID3Node >> play [
+MiniID3Data >> play [
 	^ play
 ]
 
 { #category : 'as yet unclassified' }
-MiniID3Node >> play: aString [ 
+MiniID3Data >> play: aString [ 
 	play := aString
 ]
 
 { #category : 'accessing' }
-MiniID3Node >> printOn: aStream [
+MiniID3Data >> printOn: aStream [
 
 	aStream 
 		nextPutAll: outlook ;
@@ -69,22 +69,22 @@ MiniID3Node >> printOn: aStream [
 ]
 
 { #category : 'accessing' }
-MiniID3Node >> temperature [
+MiniID3Data >> temperature [
 	^ temperature
 ]
 
 { #category : 'as yet unclassified' }
-MiniID3Node >> temperature: aString [ 
+MiniID3Data >> temperature: aString [ 
 	
 	temperature := aString
 ]
 
 { #category : 'accessing' }
-MiniID3Node >> windy [
+MiniID3Data >> windy [
 	^ windy
 ]
 
 { #category : 'as yet unclassified' }
-MiniID3Node >> windy: aBoolean [ 
+MiniID3Data >> windy: aBoolean [ 
 	windy := aBoolean
 ]

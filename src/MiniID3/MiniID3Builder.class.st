@@ -20,24 +20,30 @@ MiniID3Builder >> ID3ClassBlock: aBlock [
 	id3ClassBlock := aBlock
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'compute' }
 MiniID3Builder >> computeEntropyOf: aPropertySelector [
 
-	| v | 
-	v := self valuesOf: aPropertySelector.
-	self halt.
+	| dict entropy | 
+	dict := nodes groupedBy: aPropertySelector.
+	entropy := 0.
+	dict keysAndValuesDo: [ :k :v | 
+		| i |
+		i := (self computeInformationOf: v).
+		entropy := entropy + ((i subsetSize / self setSize) * i information)
+		].
+	^ entropy
 	
 	
 	
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'compute' }
 MiniID3Builder >> computeInformation [
 
 	^ self computeInformationOf: nodes
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'compute' }
 MiniID3Builder >> computeInformation3 [
 
 	| classes n p propP propN i |
@@ -51,8 +57,8 @@ MiniID3Builder >> computeInformation3 [
 	^ i
 ]
 
-{ #category : 'as yet unclassified' }
-MiniID3Builder >> computeInformationOf: nodeSubset [
+{ #category : 'compute' }
+MiniID3Builder >> computeInformationOf2: nodeSubset [
 
 	| n p propP propN i |
 	n := nodeSubset count: id3ClassBlock.
@@ -62,6 +68,16 @@ MiniID3Builder >> computeInformationOf: nodeSubset [
 	propN := n/(n+p).
 	i :=  ((propP * (propP log: 2)) negated) + ((propN * (propN log: 2)) negated).
 	^ i
+]
+
+{ #category : 'compute' }
+MiniID3Builder >> computeInformationOf: nodeSubset [
+
+	| n p |
+	n := nodeSubset count: id3ClassBlock.
+	p := nodeSubset size - n.
+	^ MiniID3Information new 
+		playedNumber: p notPlayedNumber: n
 ]
 
 { #category : 'accessing' }
@@ -79,7 +95,13 @@ MiniID3Builder >> nodes: aCollection [
 	nodes := aCollection
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
+MiniID3Builder >> setSize [ 
+
+	^ nodes size
+]
+
+{ #category : 'compute' }
 MiniID3Builder >> valuesOf: aPropertySelector [
 
 	^ nodes collect: [ :aNode | aNode perform: aPropertySelector ] as: Set 
