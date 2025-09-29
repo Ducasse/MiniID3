@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'playedNumber',
 		'notPlayedNumber',
-		'subset',
+		'forValue',
 		'information',
 		'propP',
 		'p',
@@ -17,11 +17,19 @@ Class {
 
 { #category : 'accessing' }
 MiniID3Information >> compute [
-
+	 
+	playedNumber isZero or: [ notPlayedNumber isZero 
+		ifTrue: [ information := 0. ^ self ] ].
 	propP := playedNumber/(notPlayedNumber +playedNumber).
 	propN := notPlayedNumber/(notPlayedNumber+playedNumber).
 	information :=  ((propP * (propP log: 2)) negated) + ((propN * (propN log: 2)) negated).
 	
+]
+
+{ #category : 'as yet unclassified' }
+MiniID3Information >> forValue: aString [
+
+	forValue := aString
 ]
 
 { #category : 'accessing' }
@@ -48,6 +56,20 @@ MiniID3Information >> playedNumber: anInteger notPlayedNumber: anotherInteger [
 	playedNumber := anInteger.
 	notPlayedNumber := anotherInteger.
 	self compute
+]
+
+{ #category : 'as yet unclassified' }
+MiniID3Information >> printOn: aStream [
+
+	aStream nextPutAll: forValue asString.
+	aStream 
+		space;
+		nextPutAll: 'p: ';
+		print: playedNumber;
+		nextPutAll: ' n: ';
+		print: notPlayedNumber; 
+		nextPutAll: 'inf: ';
+		print: information
 ]
 
 { #category : 'as yet unclassified' }

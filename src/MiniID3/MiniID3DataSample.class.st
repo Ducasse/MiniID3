@@ -32,6 +32,6 @@ MiniID3DataSample >> data [
 		#(sunny mild normal true P)
 		#(overcast mild high true P)
 		#(overcast hot normal false P)
-		#(rain midl high true N)
+		#(rain mild high true N)
 		)
 ]

@@ -28,10 +28,23 @@ MiniID3Builder >> computeEntropyOf: aPropertySelector [
 	entropy := 0.
 	dict keysAndValuesDo: [ :k :v | 
 		| i |
-		i := (self computeInformationOf: v).
-		entropy := entropy + ((i subsetSize / self setSize) * i information)
+		i := (self computeInformationOf: v forValue: k).
+		entropy := entropy + ((i subsetSize / self setSize) asFloat * i information)
 		].
 	^ entropy
+	
+	
+	
+]
+
+{ #category : 'compute' }
+MiniID3Builder >> computeGainOf: aPropertySelector [
+	
+	
+	^ (self computeInformation information) -
+		(self computeEntropyOf: aPropertySelector)
+	
+
 	
 	
 	
@@ -80,6 +93,12 @@ MiniID3Builder >> computeInformationOf: nodeSubset [
 		playedNumber: p notPlayedNumber: n
 ]
 
+{ #category : 'compute' }
+MiniID3Builder >> computeInformationOf: nodeSubset forValue: aString [
+
+	^ (self computeInformationOf: nodeSubset) forValue: aString; yourself 
+]
+
 { #category : 'accessing' }
 MiniID3Builder >> computeMainID3ClassData [
 
@@ -88,6 +107,11 @@ MiniID3Builder >> computeMainID3ClassData [
 	
 	nGlobal := nodes count: id3ClassBlock.
 	pGlobal := nodes size - nGlobal.
+]
+
+{ #category : 'as yet unclassified' }
+MiniID3Builder >> gainOf: aString [ 
+	self shouldBeImplemented.
 ]
 
 { #category : 'accessing' }

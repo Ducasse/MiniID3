@@ -6,7 +6,33 @@ Class {
 }
 
 { #category : 'tests' }
-MiniID3NodeTest >> testComputeInformation [
+MiniID3NodeTest >> testComputeInformationOfBiPartition [
+
+	| nodes b |
+	nodes := MiniID3DataSample new asNode select: [ :each | each outlook = 'sunny' ].
+	b := MiniID3Builder new 
+		nodes: nodes;
+		ID3ClassBlock: [ :each | each play = 'N' ].
+	self 
+		assert: (b computeInformation information - 0.971) < 0.01
+
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testComputeInformationOfSinglePartitionMustBeZero [
+
+	| nodes b |
+	nodes := MiniID3DataSample new asNode select: [ :each | each outlook = 'overcast' ].
+	b := MiniID3Builder new 
+		nodes: nodes;
+		ID3ClassBlock: [ :each | each play = 'N' ].
+	self 
+		assert: (b computeInformation information) 
+		equals: 0
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testComputeInformationOnAllNodes [
 	| nodes b |
 	nodes := MiniID3DataSample new asNode.
 	b := MiniID3Builder new nodes: nodes. 
@@ -61,6 +87,58 @@ MiniID3NodeTest >> testEntropieOfOutlook [
 ]
 
 { #category : 'tests' }
+MiniID3NodeTest >> testGainOfHumidity [
+	| nodes b e |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes. 
+	b ID3ClassBlock: [ :each | each play = 'N' ].
+	e := b computeGainOf: #humidity.
+	
+	self 
+		assert: (e - 0.151) < 0.01
+
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testGainOfOutlook [
+	| nodes b e |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes. 
+	b ID3ClassBlock: [ :each | each play = 'N' ].
+	e := b computeGainOf: #outlook.
+	
+	self 
+		assert: (e - 0.246) < 0.01
+
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testGainOfTemperature [
+	| nodes b e |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes. 
+	b ID3ClassBlock: [ :each | each play = 'N' ].
+	e := b computeGainOf: #temperature.
+	
+	self 
+		assert: (e - 0.029) < 0.01
+
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testGainOfWindy [
+	| nodes b e |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes. 
+	b ID3ClassBlock: [ :each | each play = 'N' ].
+	e := b computeGainOf: #windy.
+	
+	self 
+		assert: (e - 0.048) < 0.01
+
+]
+
+{ #category : 'tests' }
 MiniID3NodeTest >> testNodeCreation [ 
 
 	| line inst |
@@ -84,6 +162,29 @@ MiniID3NodeTest >> testNodeCreation [
 		assert: inst play 
 		equals: 'N'.
 		
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testSize [
+	| nodes b |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes.
+	
+	self 
+		assert: b setSize equals: 14
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testSortAttributesBasedOnGain [
+	| nodes b e |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes. 
+	b ID3ClassBlock: [ :each | each play = 'N' ].
+	e := b computeGainOf: #outlook.
+	
+	self 
+		assert: (e - 0.246) < 0.01
+
 ]
 
 { #category : 'tests' }
