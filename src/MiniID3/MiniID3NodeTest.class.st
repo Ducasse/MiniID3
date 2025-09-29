@@ -10,8 +10,21 @@ MiniID3NodeTest >> testComputeInformation [
 	| nodes b |
 	nodes := MiniID3DataSample new asNode.
 	b := MiniID3Builder new nodes: nodes. 
+	b ID3ClassBlock: [ :each | each play = 'N' ].
 	self 
 		assert: (b computeInformation - 0.940) < 0.01
+
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testEntropie [
+	| nodes b e |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes. 
+	e := b computeEntropyOf: #outlook.
+	
+	self 
+		assert: (b computeInformation - 0.694) < 0.01
 
 ]
 
@@ -39,4 +52,17 @@ MiniID3NodeTest >> testNodeCreation [
 		assert: inst play 
 		equals: 'N'.
 		
+]
+
+{ #category : 'tests' }
+MiniID3NodeTest >> testValuesOf [
+	| nodes b v |
+	nodes := MiniID3DataSample new asNode.
+	b := MiniID3Builder new nodes: nodes. 
+	v := b valuesOf: #outlook.
+	
+	self 
+		assertCollection: v 
+		equals: #('sunny' 'overcast' 'rain') asSet
+
 ]

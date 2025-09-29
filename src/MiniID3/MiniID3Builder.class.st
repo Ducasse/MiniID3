@@ -2,23 +2,39 @@ Class {
 	#name : 'MiniID3Builder',
 	#superclass : 'Object',
 	#instVars : [
-		'nodes'
+		'nodes',
+		'id3ClassSelector',
+		'nGlobal',
+		'pGlobal',
+		'id3ClassBlock'
 	],
 	#category : 'MiniID3',
 	#package : 'MiniID3'
 }
 
+{ #category : 'accessing' }
+MiniID3Builder >> ID3ClassBlock: aBlock [
+	"an ID3 class block is a predicate that verifies one aspect of the conclusion.
+	In the tennis data set it is the was the match played or not"
+	
+	id3ClassBlock := aBlock
+]
+
+{ #category : 'as yet unclassified' }
+MiniID3Builder >> computeEntropyOf: aPropertySelector [
+
+	| v | 
+	v := self valuesOf: aPropertySelector.
+	self halt.
+	
+	
+	
+]
+
 { #category : 'as yet unclassified' }
 MiniID3Builder >> computeInformation [
 
-	| n p propP propN i |
-	n := nodes count: [ :each | each play = 'N' ].
-	p := nodes count: [ :each | each play = 'P' ].
-	
-	propP := p/(n+p).
-	propN := n/(n+p).
-	i :=  ((propP * (propP log: 2)) negated) + ((propN * (propN log: 2)) negated).
-	^ i
+	^ self computeInformationOf: nodes
 ]
 
 { #category : 'as yet unclassified' }
@@ -35,7 +51,38 @@ MiniID3Builder >> computeInformation3 [
 	^ i
 ]
 
+{ #category : 'as yet unclassified' }
+MiniID3Builder >> computeInformationOf: nodeSubset [
+
+	| n p propP propN i |
+	n := nodeSubset count: id3ClassBlock.
+	p := nodeSubset size - n.
+	
+	propP := p/(n+p).
+	propN := n/(n+p).
+	i :=  ((propP * (propP log: 2)) negated) + ((propN * (propN log: 2)) negated).
+	^ i
+]
+
+{ #category : 'accessing' }
+MiniID3Builder >> computeMainID3ClassData [
+
+	nodes ifNif: [ self error: 'Provide data' ].
+	id3ClassBlock ifNil: [ self error: 'Please specify how to access the ID3Class' ].
+	
+	nGlobal := nodes count: id3ClassBlock.
+	pGlobal := nodes size - nGlobal.
+]
+
 { #category : 'accessing' }
 MiniID3Builder >> nodes: aCollection [ 
 	nodes := aCollection
+]
+
+{ #category : 'as yet unclassified' }
+MiniID3Builder >> valuesOf: aPropertySelector [
+
+	^ nodes collect: [ :aNode | aNode perform: aPropertySelector ] as: Set 
+	
+	
 ]
